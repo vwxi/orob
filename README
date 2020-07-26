@@ -1,0 +1,93 @@
+(C) hunj 20XX - infinity and beyond
+
++=====================================================+
+ _        _    _
+| |_ __ _| |__| |___
+|  _/ _` | '_ \ / -_)
+ \__\__,_|_.__/_\___|
+      __              _           _
+ ___ / _|  __ ___ _ _| |_ ___ _ _| |_ ___
+/ _ \  _| / _/ _ \ ' \  _/ -_) ' \  _(_-<
+\___/_|   \__\___/_||_\__\___|_||_\__/__/
+
+I. introduction
+II. controls
+III. some kind words
+
++=====================================================+
+ _     _               _         _   _
+(_)_ _| |_ _ _ ___  __| |_  _ __| |_(_)___ _ _
+| | ' \  _| '_/ _ \/ _` | || / _|  _| / _ \ ' \
+|_|_||_\__|_| \___/\__,_|\_,_\__|\__|_\___/_||_|
+
+orob is a terminal-based roguelike written by hunj. 
+the purpose of this game is to allow the end-user to 
+have a minimal roguelike experience without the troubles 
+of larger roguelikes.
+
+there is no story behind the game. the goal is to
+last as long as possible without dying. each move will
+remove one of your life points. he who lasts the longest
+wins the game.
+
+WARNING: this game might not be finished! items and
+enemies are going to be added given time. 
+
++=====================================================+
+            _           _
+ __ ___ _ _| |_ _ _ ___| |___
+/ _/ _ \ ' \  _| '_/ _ \ (_-<
+\__\___/_||_\__|_| \___/_/__/
+
+controls that require several keystrokes will be
+visualized in tree view.
+
+1. movement
+
+basic movement in all directions is simple. the four
+primary directions are displayed here:
+
+            w <- UP
+ LEFT -> a  .  s <- RIGHT
+            d <- DOWN
+
+and diagonal movements can be done by pressing two of
+the four primary directions.
+
+the player cannot move into walls or the void.
+
+2. control tree
+
+here's a control tree for each action in the game. each
+new sub-branch represents another keystroke in order to
+complete that action.
+
+m - Menu
+|__ p - Player Information
+|__ q - Quit Game
+|__ i - Inventory
+| |__ w - Wield Item
+| | |_ NUM
+| |__ u - Removal
+| | |__ d - Drop Item Onto Ground
+| | | |_ NUM
+| | |__ w - Remove Item From Hand
+| | | |_ NUM
+| |__ c - Consumption
+| | |__ c - Consume Item
+| | | |_ NUM
+| |
++-+ END OF TREE
+
+Chest Menu
+|__ p - Pick up item
+| |_ NUM
+|__ d - Drop item back into chest
+| |_ NUM
+|__ q - Leave chest menu
+|
++ END OF TREE
+
++=====================================================+
+
+glhf!
