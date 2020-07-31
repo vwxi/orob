@@ -38,8 +38,6 @@ game_maze::game_maze()
 			game_chest c;
 			
 			c.coords = { .x = rrange<int>(0, width), .y = rrange<int>(0, length) };
-			c.condition = relemv<game_chest_cond>(
-			std::vector<game_chest_cond>{GOOD, LOCKED, BROKEN});
 
 			c.difficulty = rrange<int>(5, 7);
 			
@@ -80,8 +78,9 @@ game_maze::game_maze()
 				.type = CONS,
 				.stat = relemv<game_cons_stat_type>(
 					std::vector<game_cons_stat_type>
-					{NONE, LIFE, STR, DEF, STH}
+					{CNONE, LIFE, STR, DEF, STH}
 				),
+				.armor_type = ANONE,
 				.coords = { .x = rrange<int>(0, width),
 							.y = rrange<int>(0, length) },
 				.weight = 1,

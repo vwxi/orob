@@ -12,97 +12,245 @@ void game_menu::inventory_menu(game_player& p)
 	
 	if(p.inventory.empty()) {
 		RPRINTW("Nothing");
-		getch();
-	} else {
-		int i = 0;
-		int w_sum = 0;
+	}
+	
+	int i = 0;
+	int w_sum = 0;
+	
+	for(game_item item : p.inventory) {
+		RPRINTW("%d)\ta %s (weight: %d)\n", i,
+						item.name.c_str(),
+						item.weight);
+		w_sum += item.weight;
+		i++;
+	}
+
+	RPRINTW("\n\nYou are currently carrying %d units of weight.\n", w_sum);
+	RPRINTW("You can carry up to %d units of weight.\n", p.weight - w_sum);
+	
+	RPRINTW("\nWhat to do? (wWRucq): ");
+
+	std::vector<game_item> _inventory;
+	
+	switch(getch()) {
+	case 'W':
+		RPRINTW("\nWhat to wear? (0-%d): ", i > 0 ? i - 1 : 0);
+
+		int W;
+		W = std::stoi(sgetstr());
+
+		if(W > (int)p.inventory.size() - 1 || W < 0) {
+			RPRINTW("Item does not exist.\n");
+			getch();	
+		} else if(p.inventory.at(W).type != ARMOR) {
+			RPRINTW("Item is not armor.\n");
+			getch();
+		} else {
+			armor_menu(p, p.inventory.at(W), WEAR);
+			p.inventory.erase(p.inventory.begin() + W);
+		}
+			
+		break;
+
+	case 'R':
+		break;
+			
+	case 'w': // wield
+		RPRINTW("\nWhat to wield? (0-%d): ", i > 0 ? i - 1 : 0);
+
+		int w;
+		w = std::stoi(sgetstr());
+
+		if(w > (int)p.inventory.size() - 1 || w < 0) {
+			RPRINTW("Item does not exist.\n");
+			getch();
+		} else if(p.inventory.at(w).type != WEAPON) {
+			RPRINTW("Item is not a weapon.\n");
+			getch();
+		} else if(p.current_weapon.name != nothing_item.name) {
+			RPRINTW("You are already wielding a weapon.\n");
+			getch();
+		} else {
+			p.current_weapon = p.inventory.at(w);
+			p.inventory.erase(p.inventory.begin() + w);
+			p.strength += p.current_weapon.power;
+
+			alog.log_m(
+			string_format(
+			"You wield your %s",
+			p.current_weapon.name.c_str()
+			));
+		}
 		
-		for(game_item item : p.inventory) {
-			RPRINTW("%d)\ta %s (weight: %d)\n", i,
-							item.name.c_str(),
-							item.weight);
-			w_sum += item.weight;
-			i++;
+		break;
+		
+	case 'u': // unwield
+		p.strength -= p.current_weapon.power;
+		p.inventory.push_back(p.current_weapon);
+		p.current_weapon = nothing_item;
+
+		for(game_item item : p.inventory)
+			if(item == nothing_item) _inventory.push_back(item); // what? fix comparison voodoo later
+
+		p.inventory = _inventory;
+		_inventory = std::vector<game_item>{};
+		
+		break;
+			
+	case 'c': // consume
+		RPRINTW("\nWhat to consume? (0-%d): ", i > 0 ? i - 1 : 0);
+
+		int c;
+		c = std::stoi(sgetstr());
+
+		if(c > (int)p.inventory.size() - 1 || c < 0) {
+			RPRINTW("Item does not exist.\n");
+			getch();
+		} else if(p.inventory.at(c).type != CONS) {
+			RPRINTW("Item is not consumeable.\n");
+			getch();
+		} else {
+			switch(p.inventory.at(c).stat) {
+			case CNONE: default: break;
+			case LIFE: 	p.life 		+= p.inventory.at(c).power; break;
+			case STR: 	p.strength 	+= p.inventory.at(c).power; break;
+			case DEF:	p.defense 	+= p.inventory.at(c).power; break;
+			case STH:	p.stealth	+= p.inventory.at(c).power; break;
+			}
+
+			p.weight -= p.inventory.at(c).weight;
+			p.inventory.erase(p.inventory.begin() + c);				
+		}
+			
+		break;
+
+	case 'q': // quit
+		break;
+	}
+}
+
+void game_menu::armor_menu(game_player& pl, game_item& i, game_armor_action a)
+{
+	erase();
+
+	if(a == WEAR)
+		RPRINTW("Add %s (weight: %d) as what? (hclf): ", 
+				i.name.c_str(), i.weight)
+	else
+		RPRINTW("Remove what? (hclf): ");
+		
+	// this is sloppy.
+	switch(getch()) {
+	case 'h':
+		if(pl.armor_set.head != nothing_item) {
+			RPRINTW("\nYou are already wearing something on your head.\n");
+			pl.inventory.push_back(i);
+			getch();
+		} else if(pl.weight < i.weight) {
+			RPRINTW("\nItem is too heavy.\n");
+			pl.inventory.push_back(i);
+			getch();
+		} else if(i.armor_type != HEAD) {
+			RPRINTW("\nItem is not made for wearing on head.\n");
+			pl.inventory.push_back(i);
+			getch();
+		} else {
+			if(a == WEAR) {
+				pl.armor_set.head = i;
+				pl.defense += pl.armor_set.head.power;
+			} else {
+				pl.defense -= pl.armor_set.head.power;
+				pl.inventory.push_back(pl.armor_set.head);
+
+				pl.armor_set.head = nothing_item;
+			}
+		}
+		
+		break;
+
+	case 'c': 
+		if(pl.armor_set.chest != nothing_item) {
+			RPRINTW("\nYou are already wearing something on your chest.\n");
+			pl.inventory.push_back(i);
+			getch();
+		} else if(pl.weight < i.weight) {
+			RPRINTW("\nItem is too heavy.\n");
+			pl.inventory.push_back(i);
+			getch();
+		} else if(i.armor_type != CHEST) {
+			RPRINTW("\nItem is not made for wearing on chest.\n");
+			pl.inventory.push_back(i);
+			getch();
+		} else {
+			if(a == WEAR) {
+				pl.armor_set.chest = i;
+				pl.defense += pl.armor_set.chest.power;
+			} else {
+				pl.defense -= pl.armor_set.chest.power;
+				pl.inventory.push_back(pl.armor_set.chest);
+
+				pl.armor_set.chest = nothing_item;
+			}
+		}
+		
+		break;
+
+	case 'l':
+		if(pl.armor_set.chest != nothing_item) {
+			RPRINTW("\nYou are already wearing something on your legs.\n");
+			pl.inventory.push_back(i);
+			getch();
+		} else if(pl.weight < i.weight) {
+			RPRINTW("\nItem is too heavy.\n");
+			pl.inventory.push_back(i);
+			getch();
+		} else if(i.armor_type != LEG) {
+			RPRINTW("\nItem is not made for wearing on legs.\n");
+			pl.inventory.push_back(i);
+			getch();
+		} else {
+			if(a == WEAR) {
+				pl.armor_set.leg = i;
+				pl.defense += pl.armor_set.leg.power;
+			} else {
+				pl.defense -= pl.armor_set.leg.power;
+				pl.inventory.push_back(pl.armor_set.leg);
+
+				pl.armor_set.leg = nothing_item;
+			}
+		}
+		
+		break;
+
+	case 'f':
+		if(pl.armor_set.chest != nothing_item) {
+			RPRINTW("\nYou are already wearing something on your feet.\n");
+			pl.inventory.push_back(i);
+			getch();
+		} else if(pl.weight < i.weight) {
+			RPRINTW("\nItem is too heavy.\n");
+			pl.inventory.push_back(i);
+			getch();
+		} else if(i.armor_type != FEET) {
+			RPRINTW("\nItem is not made for wearing on feet.\n");
+			pl.inventory.push_back(i);
+			getch();
+		} else {
+			if(a == WEAR) {
+				pl.armor_set.feet = i;
+				pl.defense += pl.armor_set.feet.power;
+			} else {
+				pl.defense -= pl.armor_set.feet.power;
+				pl.inventory.push_back(pl.armor_set.feet);
+
+				pl.armor_set.feet = nothing_item;
+			}
 		}
 
-		RPRINTW("\nYou are currently carrying %d units of weight.\n", w_sum);
-		RPRINTW("You can carry up to %d units of weight.\n", p.weight - w_sum);
-		
-		RPRINTW("\nWhat to do? (wucq): ");
-		
-		switch(getch()) {
-		case 'w': // wield
-			RPRINTW("\nWhat to wield? (0-%d): ", i > 0 ? i - 1 : 0);
+		break;
 
-			int w;
-			w = std::stoi(sgetstr());
-
-			if(w > (int)p.inventory.size() - 1 || w < 0) {
-				RPRINTW("\nItem does not exist.\n");
-				getch();
-			} else if(p.inventory.at(w).type != WEAPON) {
-				RPRINTW("\nItem is not a weapon.\n");
-				getch();
-			} else if(p.current_weapon.name != nothing_item.name) {
-				RPRINTW("\nYou are already wielding a weapon.\n");
-				getch();
-			} else {
-				p.current_weapon = p.inventory.at(w);
-				p.inventory.erase(p.inventory.begin() + w);
-
-				p.strength += p.current_weapon.power;
-				
-				alog.log_m(
-				string_format(
-				"You wield your %s",
-				p.current_weapon.name.c_str()
-				));
-			}
-			
-			break;
-			
-		case 'u': // unwield
-			if(!p.current_weapon) {
-				RPRINTW("\nYou are not currently wielding anything.\n");
-				getch();
-			} else {
-				p.strength -= p.current_weapon.power;
-				
-				p.inventory.push_back(p.current_weapon);
-				p.current_weapon = nothing_item;
-			}
-			break;
-			
-		case 'c': // consume
-			RPRINTW("\nWhat to consume? (0-%d): ", i > 0 ? i - 1 : 0);
-
-			int c;
-			c = std::stoi(sgetstr());
-
-			if(c > (int)p.inventory.size() - 1 || c < 0) {
-				RPRINTW("\nItem does not exist.\n");
-				getch();
-			} else if(p.inventory.at(c).type != CONS) {
-				RPRINTW("\nItem is not consumeable.\n");
-				getch();
-			} else {
-				switch(p.inventory.at(c).stat) {
-				case NONE: 	default: break;
-				case LIFE: 	p.life 		+= p.inventory.at(c).power; break;
-				case STR: 	p.strength 	+= p.inventory.at(c).power; break;
-				case DEF:	p.defense 	+= p.inventory.at(c).power; break;
-				case STH:	p.stealth	+= p.inventory.at(c).power; break;
-				}
-
-				p.weight -= p.inventory.at(c).weight;
-				p.inventory.erase(p.inventory.begin() + c);				
-			}
-			
-			break;
-
-		case 'q': // quit
-			break;
-		}
+	default:
+		break;
 	}
 }
 
@@ -244,14 +392,15 @@ void game_menu::player_menu(game_player p)
 
 	RPRINTW("%s's armor set:\n", p.name.c_str());
 
-	auto C = [](auto i) { 
-		return (!i) ? "Nothing" : i.name.c_str();
-	};
 	
-	RPRINTW("Head: %s (weight: %d)\n", 	C(p.armor_set.head), p.armor_set.head.weight);
-	RPRINTW("Chest: %s (weight: %d)\n", C(p.armor_set.chest), p.armor_set.chest.weight);
-	RPRINTW("Legs: %s (weight: %d)\n", 	C(p.armor_set.leg), p.armor_set.leg.weight);
-	RPRINTW("Feet: %s (weight: %d)\n\n",C(p.armor_set.feet), p.armor_set.feet.weight);
+	RPRINTW("Head: %s (weight: %d)\n", 	
+			p.armor_set.head.name.c_str(), p.armor_set.head.weight);
+	RPRINTW("Chest: %s (weight: %d)\n", 
+			p.armor_set.chest.name.c_str(), p.armor_set.chest.weight);
+	RPRINTW("Legs: %s (weight: %d)\n", 	
+			p.armor_set.leg.name.c_str(), p.armor_set.leg.weight);
+	RPRINTW("Feet: %s (weight: %d)\n\n",
+			p.armor_set.feet.name.c_str(), p.armor_set.feet.weight);
 
 	RPRINTW("%s's current weapon: %s (weight: %d)\n",
 			p.name.c_str(),

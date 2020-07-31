@@ -28,7 +28,7 @@ game_player::game_player(std::string n, game_player_type t, game_maze& m)
 		defense = 2;
 		stealth = 1;
 
-		inventory.push_back({"dull sword", WEAPON, NONE,
+		inventory.push_back({"dull sword", WEAPON, CNONE, ANONE,
 							{ -1, -1 }, 1, 100, 2, -1});
 
 		break;
@@ -38,7 +38,7 @@ game_player::game_player(std::string n, game_player_type t, game_maze& m)
 		defense = 2;
 		stealth = 1;
 
-		inventory.push_back({"dull wand", WEAPON, NONE,
+		inventory.push_back({"dull wand", WEAPON, CNONE, ANONE,
 							{ -1, -1 }, 1, 100, 2, -1});
 							
 		break;
@@ -48,15 +48,15 @@ game_player::game_player(std::string n, game_player_type t, game_maze& m)
 		defense = 1;
 		stealth = 3;
 
-		inventory.push_back({"dull shank", WEAPON, NONE,
+		inventory.push_back({"dull shank", WEAPON, CNONE, ANONE,
 							{ -1, -1 }, 1, 100, 2, -1});
 		break;
 	}
 
 	armor_set = {
-		.head = {"head cloth", ARMOR, NONE, { -1, -1 }, 0, 1000, 0, -1},
-		.chest = {"dirty shirt", ARMOR, NONE, { -1, -1 }, 0, 1000, 0, -1},
-		.leg = {"dirty pants", ARMOR, NONE, { -1, -1 }, 0, 1000, 0, -1},
+		.head = nothing_item,
+		.chest = nothing_item,
+		.leg = nothing_item,
 		.feet = nothing_item
 	};
 

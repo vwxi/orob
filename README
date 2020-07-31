@@ -66,16 +66,22 @@ m - Menu
 |__ p - Player Information
 |__ q - Quit Game
 |__ i - Inventory
+| |__ W - Wear armor
+| | |_ NUM
+| | ||_ h - Place onto head
+| | ||_ c - Place onto chest
+| | ||_ l - Place onto legs
+| | ||_ f - Place on feet
+| |__ R - Remove clothing
+| | |_ h - Remove head armor
+| | |_ c - Remove chest armor
+| | |_ l - Remove leg armor
+| | |_ f - Remove foot armor
 | |__ w - Wield Item
 | | |_ NUM
-| |__ u - Removal
-| | |__ d - Drop Item Onto Ground
-| | | |_ NUM
-| | |__ w - Remove Item From Hand
-| | | |_ NUM
-| |__ c - Consumption
-| | |__ c - Consume Item
-| | | |_ NUM
+| |__ u - Unwield Item
+| |__ c - Consume Item
+|   |_ NUM
 | |
 +-+ END OF TREE
 
