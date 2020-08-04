@@ -16,7 +16,9 @@ struct game_maze
 	int length;
 	int width;
 
-	game_coord player;
+	game_coord player,
+				down,
+				up;
 	
 	std::vector<game_coord> walls;
 	std::vector<game_item> items;
@@ -29,7 +31,11 @@ struct game_maze
 	void cycle(game_player&);
 
 private:
+	game_coord try_coords();
 	game_coord try_coords(game_enemy&);
 };
+
+static int current __attribute__((unused));
+static std::vector<game_maze> floors;
 
 #endif

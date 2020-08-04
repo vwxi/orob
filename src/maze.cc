@@ -15,6 +15,8 @@ game_maze::game_maze()
 	width = 200;
 
 	player = { .x = 0, .y = 0 };
+	up = { .x = rrange<int>(0, width), .y = rrange<int>(0, length) };
+	down = { .x = rrange<int>(0, width), .y = rrange<int>(0, length) };
 	
 	// prevent exceptions
 	chests.resize(1);
@@ -100,7 +102,7 @@ game_maze::game_maze()
 		if(rrange<int>(0, 100) < 60) { // but not all enemies may appear (60% chance)
 			game_enemy e = relemv<game_enemy>(global_enemies);
 
-			e.coords = { .x = rrange<int>(0, width), .y = rrange<int>(0, length) };
+			e.coords = try_coords();
 
 			enemies.push_back(e);
 		}
@@ -130,6 +132,9 @@ char game_maze::describe(int x, int y)
 	for(game_enemy enemy : enemies)
 		if(enemy.coords.x == x && enemy.coords.y == y) return 'E';
 
+	if(up.x == x && up.y == y) return '<';
+	if(down.x == x && down.y == y) return '>';
+	
 	// is player there?
 	if(x == player.x && y == player.y) return '@';
 	 
@@ -139,6 +144,21 @@ char game_maze::describe(int x, int y)
 // for each move in the game, enemies have to move.
 // enemies will move one tile towards the player on
 // each move.
+
+game_coord game_maze::try_coords()
+{
+	game_coord rc = { .x = rrange<int>(0, width), 
+					  .y = rrange<int>(0, length) };
+
+	switch(describe(rc.x, rc.y)) {
+	case '#': case 'E': case 'I': case 'C': 
+	case '>': case '<': 
+		try_coords();
+		break;
+	}
+
+	return rc;
+}
 
 game_coord game_maze::try_coords(game_enemy& e)
 {

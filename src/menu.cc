@@ -341,7 +341,7 @@ void game_menu::chest_menu(game_player& pl, game_chest& c)
 				getch();
 			} else {
 				pl.inventory.push_back(c.items.at(p));
-				c.items.erase(c.items.begin() + i);
+				c.items.erase(c.items.begin() + p);
 
 				pl.weight -= pl.inventory.back().weight;
 				

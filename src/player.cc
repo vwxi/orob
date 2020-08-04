@@ -137,6 +137,12 @@ void game_player::walk(game_maze& maze, int xd, int yd)
 				menu.chest_menu(*this, c);
 				
 		break;
+
+	case '>':
+		break;
+
+	case '<':
+		break;
 								
 	case '.':
 		maze.player.x += xd;

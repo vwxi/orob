@@ -96,14 +96,18 @@ game_player dq2_init_player(game_maze& maze)
 	return player;
 }
 
-
 int main()
 {
-	game_maze maze;
+	for(int i = 0; i < 20; i++) {
+		game_maze m;
+		floors.push_back(m);
+	}
+
+	current = 0;
 	
 	dq2_init();
 		
-	game_player player = dq2_init_player(maze);
+	game_player player = dq2_init_player(floors.at(current));
 	
 	while(1) {	
 		if(player.life <= 0) {
@@ -117,28 +121,28 @@ int main()
 
 		if(player.life < 100) alog.log_m("You are dying.");
 		
-		maze.cycle(player);
+		floors.at(current).cycle(player);
 				
-		player.look(maze);
+		player.look(floors.at(current));
 
 		switch(getch()) {
 		case 'm':
 			menu.spawn_menu(player);
 			
 		case 'w': case 'W':
-			player.walk(maze, 0, -1);
+			player.walk(floors.at(current), 0, -1);
 			break;
 			
 		case 'a': case 'A': 
-			player.walk(maze, -1, 0);
+			player.walk(floors.at(current), -1, 0);
 			break;
 			
 		case 's': case 'S': 
-			player.walk(maze, 0, 1);
+			player.walk(floors.at(current), 0, 1);
 			break;
 			
 		case 'd': case 'D': 
-			player.walk(maze, 1, 0);
+			player.walk(floors.at(current), 1, 0);
 			break;
 
 		#ifdef DEBUG
