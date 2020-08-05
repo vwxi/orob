@@ -20,7 +20,7 @@ void dq2_init()
 
 	RPRINTW(
 	"Orob " VERSION "\n"
-	"Written by hunj & eklips\n"
+	"Written by hunj\n"
 	"This game will always be free (as in freedom and free beer)\n\n"
 	"Press any key to continue\n"
 	);
