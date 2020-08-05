@@ -281,7 +281,7 @@ void game_menu::item_menu(game_player& pl, game_item& i)
 
 		break;
 
-	default: case 'n': case 'N':
+	default:
 		break;
 	}
 }
@@ -302,7 +302,7 @@ void game_menu::chest_menu(game_player& pl, game_chest& c)
 			RPRINTW("\nThe chest would not open. Try again? [Y/n]: ");
 
 			switch(getch()) {
-			default: case 'y': case 'Y':
+			default:
 				chest_menu(pl, c);
 			case 'n': case 'N':
 				break;
@@ -381,7 +381,7 @@ void game_menu::chest_menu(game_player& pl, game_chest& c)
 		
 		break;
 		
-	default: case 'n': case 'N':
+	default:
 		return;	
 	}
 }

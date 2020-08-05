@@ -20,7 +20,7 @@ void dq2_init()
 
 	RPRINTW(
 	"Orob " VERSION "\n"
-	"Written by hunj & eklips\n"
+	"Written by hunj\n"
 	"This game will always be free (as in freedom and free beer)\n\n"
 	"Press any key to continue\n"
 	);
@@ -84,9 +84,7 @@ game_player dq2_init_player(game_maze& maze)
 		return player;
 		break;
 
-	default:		
-	case 'n':
-	case 'N':
+	default:
 		noecho();
 		erase();
 		return dq2_init_player(maze);
@@ -134,19 +132,19 @@ int main()
 		case 'm':
 			menu.spawn_menu(player);
 			
-		case 'w': case 'W':
+		case 'w': case 'W': case KEY_UP:
 			player.walk(floors.at(current), 0, -1);
 			break;
 			
-		case 'a': case 'A': 
+		case 'a': case 'A': case KEY_LEFT:
 			player.walk(floors.at(current), -1, 0);
 			break;
 			
-		case 's': case 'S': 
+		case 's': case 'S': case KEY_DOWN:
 			player.walk(floors.at(current), 0, 1);
 			break;
 			
-		case 'd': case 'D': 
+		case 'd': case 'D': case KEY_RIGHT:
 			player.walk(floors.at(current), 1, 0);
 			break;
 
