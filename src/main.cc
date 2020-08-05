@@ -20,7 +20,7 @@ void dq2_init()
 
 	RPRINTW(
 	"Orob " VERSION "\n"
-	"Written by hunj\n"
+	"Written by hunj & eklips\n"
 	"This game will always be free (as in freedom and free beer)\n\n"
 	"Press any key to continue\n"
 	);
@@ -98,11 +98,16 @@ game_player dq2_init_player(game_maze& maze)
 
 int main()
 {
+	std::cout << "Generating floors..." << std::endl;
+
+	auto G_R = []{ game_maze m; return m; };
+	
 	for(int i = 0; i < 20; i++) {
-		game_maze m;
-		floors.push_back(m);
+		floors.push_back(G_R());
 	}
 
+	floors.at(0).up = { -1, -1 };
+	
 	current = 0;
 	
 	dq2_init();

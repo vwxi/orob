@@ -15,6 +15,7 @@ game_maze::game_maze()
 	width = 200;
 
 	player = { .x = 0, .y = 0 };
+	
 	up = { .x = rrange<int>(0, width), .y = rrange<int>(0, length) };
 	down = { .x = rrange<int>(0, width), .y = rrange<int>(0, length) };
 	
@@ -132,6 +133,7 @@ char game_maze::describe(int x, int y)
 	for(game_enemy enemy : enemies)
 		if(enemy.coords.x == x && enemy.coords.y == y) return 'E';
 
+	// search stairs
 	if(up.x == x && up.y == y) return '<';
 	if(down.x == x && down.y == y) return '>';
 	

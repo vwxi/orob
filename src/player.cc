@@ -139,9 +139,32 @@ void game_player::walk(game_maze& maze, int xd, int yd)
 		break;
 
 	case '>':
+		RPRINTW("CURRENT: %d\n", current);
+		RPRINTW("Go up the stairs? [y/N]: ");
+				
+		switch(getch()) {
+		case 'y': case 'Y':
+			current += 1;
+			break;
+		
+		default: case 'n': case 'N': break;
+		}
+		
 		break;
 
 	case '<':
+		RPRINTW("CURRENT: %d\n", current);
+
+		RPRINTW("Go down the stairs? [y/N]: ");
+		
+		switch(getch()) {
+		case 'y': case 'Y':
+			current -= 1;
+			break;
+		
+		default: case 'n': case 'N': break;
+		}
+		
 		break;
 								
 	case '.':

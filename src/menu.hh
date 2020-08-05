@@ -6,11 +6,7 @@
 
 #include <ncurses.h>
 
-enum game_armor_action
-{
-	WEAR,
-	REMOVE
-};
+enum game_armor_action { WEAR, REMOVE };
 
 struct game_menu 
 {
@@ -21,6 +17,6 @@ struct game_menu
 	void chest_menu(game_player&, game_chest&);
 	void item_menu(game_player&, game_item&);
 	void armor_menu(game_player&, game_item&, game_armor_action);
-} static menu __attribute__((unused)); // damn you, GCC!
+} static menu __attribute__((unused));
 
 #endif
