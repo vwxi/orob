@@ -11,13 +11,10 @@
 game_maze::game_maze()
 {
 	// dimensions
-	length = 200;
-	width = 200;
+	length = 400;
+	width = 400;
 
 	player = { .x = 0, .y = 0 };
-	
-	up = { .x = rrange<int>(0, width), .y = rrange<int>(0, length) };
-	down = { .x = rrange<int>(0, width), .y = rrange<int>(0, length) };
 	
 	// prevent exceptions
 	chests.resize(1);
@@ -26,10 +23,10 @@ game_maze::game_maze()
 	walls.resize(1);
 	
 	// insert walls
-	int _r = rrange<int>(100, (length*width)/4);
+	int _r = rrange<int>(100, (length*width)/2);
 	
 	for(int i = 0; i < _r; i++) {
-		game_coord c = { .x = rrange<int>(0, width), .y = rrange<int>(0, length) };
+		game_coord c = { .x = rrange<int>(1, width), .y = rrange<int>(2, length) };
 		walls.push_back(c);
 	}
 
@@ -133,10 +130,6 @@ char game_maze::describe(int x, int y)
 	for(game_enemy enemy : enemies)
 		if(enemy.coords.x == x && enemy.coords.y == y) return 'E';
 
-	// search stairs
-	if(up.x == x && up.y == y) return '<';
-	if(down.x == x && down.y == y) return '>';
-	
 	// is player there?
 	if(x == player.x && y == player.y) return '@';
 	 
@@ -154,7 +147,6 @@ game_coord game_maze::try_coords()
 
 	switch(describe(rc.x, rc.y)) {
 	case '#': case 'E': case 'I': case 'C': 
-	case '>': case '<': 
 		try_coords();
 		break;
 	}

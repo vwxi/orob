@@ -137,32 +137,6 @@ void game_player::walk(game_maze& maze, int xd, int yd)
 				menu.chest_menu(*this, c);
 				
 		break;
-
-	case '>':
-		RPRINTW("Go up the stairs? [y/N]: ");
-				
-		switch(getch()) {
-		case 'y': case 'Y':
-			current += 1;
-			break;
-		
-		default: case 'n': case 'N': break;
-		}
-		
-		break;
-
-	case '<':
-		RPRINTW("Go down the stairs? [y/N]: ");
-		
-		switch(getch()) {
-		case 'y': case 'Y':
-			current -= 1;
-			break;
-		
-		default: case 'n': case 'N': break;
-		}
-		
-		break;
 								
 	case '.':
 		maze.player.x += xd;

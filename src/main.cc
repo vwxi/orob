@@ -96,21 +96,13 @@ game_player dq2_init_player(game_maze& maze)
 
 int main()
 {
-	std::cout << "Generating floors..." << std::endl;
-
-	auto G_R = []{ game_maze m; return m; };
+	std::cout << "Generating maze..." << std::endl;
 	
-	for(int i = 0; i < 20; i++) {
-		floors.push_back(G_R());
-	}
-
-	floors.at(0).up = { -1, -1 };
-	
-	current = 0;
+	game_maze maze;
 	
 	dq2_init();
 		
-	game_player player = dq2_init_player(floors.at(current));
+	game_player player = dq2_init_player(maze);
 	
 	while(1) {	
 		if(player.life <= 0) {
@@ -124,28 +116,28 @@ int main()
 
 		if(player.life < 100) alog.log_m("You are dying.");
 		
-		floors.at(current).cycle(player);
+		maze.cycle(player);
 				
-		player.look(floors.at(current));
+		player.look(maze);
 
 		switch(getch()) {
 		case 'm':
 			menu.spawn_menu(player);
 			
 		case 'w': case 'W': case KEY_UP:
-			player.walk(floors.at(current), 0, -1);
+			player.walk(maze, 0, -1);
 			break;
 			
 		case 'a': case 'A': case KEY_LEFT:
-			player.walk(floors.at(current), -1, 0);
+			player.walk(maze, -1, 0);
 			break;
 			
 		case 's': case 'S': case KEY_DOWN:
-			player.walk(floors.at(current), 0, 1);
+			player.walk(maze, 0, 1);
 			break;
 			
 		case 'd': case 'D': case KEY_RIGHT:
-			player.walk(floors.at(current), 1, 0);
+			player.walk(maze, 1, 0);
 			break;
 
 		#ifdef DEBUG

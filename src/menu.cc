@@ -37,7 +37,7 @@ void game_menu::inventory_menu(game_player& p)
 		RPRINTW("\nWhat to wear? (0-%d): ", i > 0 ? i - 1 : 0);
 
 		int W;
-		W = std::stoi(sgetstr());
+		W = igetstr();
 
 		if(W > (int)p.inventory.size() - 1 || W < 0) {
 			RPRINTW("Item does not exist.\n");
@@ -59,7 +59,7 @@ void game_menu::inventory_menu(game_player& p)
 		RPRINTW("\nWhat to wield? (0-%d): ", i > 0 ? i - 1 : 0);
 
 		int w;
-		w = std::stoi(sgetstr());
+		w = igetstr();
 
 		if(w > (int)p.inventory.size() - 1 || w < 0) {
 			RPRINTW("Item does not exist.\n");
@@ -101,7 +101,7 @@ void game_menu::inventory_menu(game_player& p)
 		RPRINTW("\nWhat to consume? (0-%d): ", i > 0 ? i - 1 : 0);
 
 		int c;
-		c = std::stoi(sgetstr());
+		c = igetstr();
 
 		if(c > (int)p.inventory.size() - 1 || c < 0) {
 			RPRINTW("Item does not exist.\n");
@@ -331,7 +331,7 @@ void game_menu::chest_menu(game_player& pl, game_chest& c)
 			RPRINTW("\nPick up which item? (0-%d): ", i > 0 ? i - 1 : 0);
 	
 			int p;
-			p = std::stoi(std::string(sgetstr()));
+			p = igetstr();
 
 			if(p > (int)c.items.size() - 1 || p < 0) {
 				RPRINTW("\nItem does not exist.\n");
@@ -366,7 +366,7 @@ void game_menu::chest_menu(game_player& pl, game_chest& c)
 			RPRINTW("\nDrop which item into chest? (0-%d): ",
 						i > 0 ? i - 1 : 0);
 
-			int d = std::stoi(sgetstr());
+			int d = igetstr();
 
 			if(d > (int)pl.inventory.size() - 1 || d < 0) {
 				RPRINTW("\nItem does not exist.\n");

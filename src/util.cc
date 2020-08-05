@@ -10,3 +10,13 @@ std::string sgetstr()
 
 	return std::string(s);
 }
+
+
+int igetstr()
+{
+	try {
+		return std::stoi(sgetstr());
+	} catch (...) {
+		return 0;
+	}
+}

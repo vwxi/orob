@@ -16,6 +16,7 @@
 	} while(0);
 
 std::string sgetstr();
+int igetstr();
 	
 template <typename T>
 T rrange(T min, T max)
